@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript To DO App!</title>
+
+    <style>
+     .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #333;
+    }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To Do App</h1>
+
+        <div class="container2">
+            <input type="text" name="inputField" id="inputField">
+            <button id="addButton">Add</button>
+        </div>
+
+        <!-- List -->
+        <div class="container3">
+            <ul id="list">
+
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const addButton = document.getElementById('addButton');
+        addButton.addEventListener('click', () => {
+        const inputField = document.getElementById('inputField').value;
+        const list = document.getElementById('list');
+
+        if (inputField == ''){
+            alert('Plesse enter a value!')
+            return
+        }
+
+        let li = document.createElement('li');
+        list.appendChild(li);
+        li.innerHTML = `
+            ${inputField} <button onclick="deleteItem(this)">Delete</button> 
+            <button onclick="completeFunction(this)">Mark Complete</button>
+            <button onclick="editFunction(this)">Edit</button>
+        `;
+        document.getElementById('inputField').value = '';
+        });
+
+        const deleteItem = (listItem) => {
+            listItem.parentElement.remove();
+        };
+
+            const completeFunction = (line) => {
+            const li = line.parentElement;
+            li.style.width =`15px`
+            li.style.display =`block`
+            const hasLineThrough = li.style.textDecoration === 'line-through';
+            li.style.textDecoration = hasLineThrough ? '' : 'line-through';
+        };
+
+         const editFunction = (edit) => {
+            const li = edit.parentElement;
+            const taskText = li.firstChild.textContent.trim();
+
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+
+            const updateButton = document.createElement('button');
+            updateButton.textContent = 'Update';
+            updateButton.onclick = function () {
+            const updatedText = inputField.value.trim();
+            if (updatedText !== '') {
+                li.firstChild.textContent = updatedText;
+            }
+            li.removeChild(inputField); // Remove the input field after updating
+            li.removeChild(updateButton); // Remove the update button after updating
+            li.innerHTML += `
+                ${inputField.value}
+                <button onclick="deleteItem(this)">Delete</button> 
+                <button onclick="completeFunction(this)">Mark Complete</button>
+                <button onclick="editFunction(this)">Edit</button>`;
+            };
+
+            li.innerHTML = ''; // Clear the li content
+            li.appendChild(inputField); // Append the input field to the li
+            li.appendChild(updateButton); // Append the update button to the li
+        };
+</script>
+
+
+
+</body>
+</html>
